@@ -1,3 +1,5 @@
 /venv
 /chroma_db
 /__pycache__
+/chroma_db_3
+mod_req.txt
