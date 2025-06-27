@@ -374,21 +374,30 @@ async def query_documents(request: QueryRequest):
         context = "\n\n".join(contexts)
         
         # Enhanced prompt with better instructions
-        prompt = f"""Based on the following context, answer the user's question accurately and concisely.
-        Context:
+        prompt = f"""
+        You are a multilingual compliance assistant trained to answer only with verified information from internal policy documents.
+        
+        ### User Question:
+        {request.query}
+
+        ### Context (from internal documents):
         {context}
 
-        Question: {request.query}
+        ### Instructions:
+        - Detect the language of the user question (English, or Hindi) and respond in the same language.
+        - ONLY use the provided context. Do not invent or assume missing information.
+        - Your response MUST:
+            - Be clear, concise (maximum 30 words), and fact-based.
+            - Reflect the most relevant part of the source documents.
+            - Mention document name(s) and page number(s) under "References".
+        - If no answer is available from the context, say: "I couldn't find that information in the provided documents."
 
-        Instructions:
-        - Answer in the same language as the question (English, Hindi, or Hinglish)
-        - Be concise but complete (aim for 30-50 words)
-        - Use information only from the provided context
-        - If the context doesn't contain relevant information, say "I don't have enough information to answer this question"
-        - Use natural, conversational tone
-        - Focus on the most relevant information
+        ### Format:
+        Answer: <Your answer here>
 
-        Answer:"""
+        References:
+        - <DocumentName> (Page X)
+        """
         
         # Get response from LLM
         response = llm.invoke(prompt)
