@@ -1,0 +1,9 @@
+fastapi
+uvicorn==0.24.0
+python-multipart==0.0.6
+langchain
+langchain-community
+chromadb==0.4.18
+docx2txt==0.8
+ollama==0.1.7
+# pydantic==2.5.0
